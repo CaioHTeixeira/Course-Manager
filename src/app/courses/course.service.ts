@@ -1,26 +1,43 @@
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
 import { Course } from "./course";
 
 @Injectable()
 
 export class CourseService {
     
-    retrieveAll(): Course[] {
-        return COURSES;
+    private coursesUrl = 'http://localhost:3100/api/courses';
+
+    constructor(private httpClient: HttpClient) {}
+    
+    retrieveAll(): Observable<Course[]> {
+        return this.httpClient.get<Course[]>(this.coursesUrl); //nosso retorno é o Course[], entre () a url da nossa
+        //requisição. O padrão de retorno de um httpClient é um observable. Ele é como se fosse um envelope que irá 
+        //envelopar nossa resposta. Quando ele for fazer uma requisição ele precisa trabalhar com contratos, ou seja,
+        //temos o publisher(CourseService) que vai estar definindo o contrato, e precisa da pessoa que vai escutar 
+        //esse contrato(que vai ser quando a gente chamar ele no nosso componente de lista).
+        //Resumindo: na nossa classe de serviço está montando o contrato, e na nossa pasta de componente a gente vai 
+        //sobrescrever esse contrato para q possamos chamar essa requisição. A requisição de um Observable só é realizada 
+        //quando damos um subscribe no nosso Observable. Além dele ser assincrono, a gente precisa dar um subscribe para
+        //ele chamar a ação.
     }
 
-    retrieveById(id: number): Course {
-        return (COURSES.find((courseIterator: Course) => id === courseIterator.id) as Course); 
+    retrieveById(id: number): Observable<Course> {
+        return this.httpClient.get<Course>(`${this.coursesUrl}/${id}`);
+        //return (COURSES.find((courseIterator: Course) => id === courseIterator.id) as Course); 
     }
 
-    save(course: Course): void {
+    save(course: Course): Observable<Course> {
         if(course.id) {
-            const indexEditedCourse: number = COURSES.findIndex((courseIterator: Course) => courseIterator.id === course.id);
-
-            if(indexEditedCourse !== -1) {
-                COURSES[indexEditedCourse] = course;
-            } 
+            return this.httpClient.put<Course>(`${this.coursesUrl}/${course.id}`, course); 
+        } else {
+            return this.httpClient.post<Course>(`${this.coursesUrl}`, course);
         }
+    }
+
+    deleteById(id: number): Observable<any> {
+        return this.httpClient.delete<any>(`${this.coursesUrl}/${id}`);
     }
 }
 

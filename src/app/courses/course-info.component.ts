@@ -18,10 +18,16 @@ export class CourseInfoComponent implements OnInit{
         const id: number = this.activateRoute.snapshot.paramMap.get('id') as string 
             ? Number(this.activateRoute.snapshot.paramMap.get('id')) : -1;
 
-        this.course = this.courseService.retrieveById(id);
+        this.courseService.retrieveById(id).subscribe({
+            next: course => this.course = course,
+            error: err => console.log('Error', err)
+        });
     }
 
     save(): void {
-        this.courseService.save(this.course);
+        this.courseService.save(this.course).subscribe({
+            next: course => console.log('Saved with success', course),
+            error: err => console.log('Error', err)
+        });
     }
 }

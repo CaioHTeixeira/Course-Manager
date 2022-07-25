@@ -17,8 +17,27 @@ export class CourseListComponent implements OnInit {
     constructor(private courseService: CourseService) {}
 
     ngOnInit(): void {
-        this._courses = this.courseService.retrieveAll();
-        this. filteredCourses = this._courses;    
+        this.retrieveAll();
+    }
+
+    retrieveAll(): void {
+        this.courseService.retrieveAll().subscribe({ //subescrevendo o contrato e de fato vai chamar a requisição.
+            next:  courses => {//next: quando a requisição deu certo e ele retorna alguma coisa pra gente trabalhar.
+                this._courses = courses; //recebe o courses da requisição que deu certo.
+                this.filteredCourses = this._courses;  
+            },
+            error: err => console.log('Error', err)
+        });
+    }
+
+    deleteById(courseId: number): void {
+        this.courseService.deleteById(courseId).subscribe({
+            next: () => {
+                console.log('Deleted with success');
+                this.retrieveAll(); 
+            },
+            error: err => console.log('Error', err)
+        })
     }
 
     set filter(value: string) {
