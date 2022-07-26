@@ -28,12 +28,16 @@ export class CourseService {
         //return (COURSES.find((courseIterator: Course) => id === courseIterator.id) as Course); 
     }
 
-    save(course: Course): Observable<Course> {
+    editCourse(course: Course): Observable<Course> {
         if(course.id) {
             return this.httpClient.put<Course>(`${this.coursesUrl}/${course.id}`, course); 
         } else {
             return this.httpClient.post<Course>(`${this.coursesUrl}`, course);
         }
+    }
+
+    saveCourse(course: Course): Observable<Course> {
+        return this.httpClient.post<Course>(`${this.coursesUrl}`, course);
     }
 
     deleteById(id: number): Observable<any> {

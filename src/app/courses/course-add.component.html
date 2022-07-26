@@ -1,4 +1,4 @@
-<h2>Course Info</h2>
+<h2>Add Course</h2>
 
 <hr/>
 
@@ -6,8 +6,8 @@
     <div class="form-group row" style="margin-bottom: 10px;">
         <label class="col-sm-2 col-form-label">Name:</label>
         <div class="col-sm-10">
-            <input [(ngModel)]="course.name" name="name" #courseName="ngModel" 
-                [ngClass]="{'is-invalid' : courseName.invalid}" class="form-control" required>
+            <input [(ngModel)]="course.name" name="name" #courseName="ngModel" class="form-control" 
+                [ngClass]="{'is-invalid' : courseName.invalid}" required>
 
             <div class="invalid-feedback">
                 <span>Course name is required</span>
@@ -23,6 +23,30 @@
 
             <div class="invalid-feedback">
                 <span>Course price is required</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row" style="margin-bottom: 10px;">
+        <label class="col-sm-2 col-form-label">Release Date:</label>
+        <div class="col-sm-10">
+            <input [(ngModel)]="course.releaseDate" name="releaseDate" #releaseDate="ngModel" type="date" 
+                [ngClass]="{'is-invalid' : releaseDate.invalid}" class="form-control" required>
+
+            <div class="invalid-feedback">
+                <span>Course release date is required</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row" style="margin-bottom: 10px;">
+        <label class="col-sm-2 col-form-label">Code:</label>
+        <div class="col-sm-10">
+            <input [(ngModel)]="course.code" name="code" #code="ngModel" 
+                [ngClass]="{'is-invalid' : code.invalid}" class="form-control" required>
+
+            <div class="invalid-feedback">
+                <span>Course code is required</span>
             </div>
         </div>
     </div>
@@ -52,7 +76,7 @@
     </div>
 
     <div class="form-group">
-        <button class="btn btn-primary" style="margin-right: 10px;" [disabled]="courseForm.invalid" (click)="editCourse()">Edit</button>
+        <button class="btn btn-primary" style="margin-right: 10px;" [disabled]="courseForm.invalid" (click)="saveCourse()">Save</button>
         <button class="btn btn-secondary" [routerLink]="['/courses']">Back</button>
     </div>
 </form>
